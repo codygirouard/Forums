@@ -1,24 +1,42 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 
-function App() {
-  const [data, setData] = React.useState(null);
-
-  useEffect(() => {
-    fetch('/api')
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
+const Header = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? 'Loading...' : data}</p>
-      </header>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="#!">
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#!">Login</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+const Post = () => {
+  return (
+    <div className="post">
+      <p>coudei: This is my first post.</p>
+      <p>13 comments</p>
+      <p>3 likes</p>
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <>
+      <Header />
+      <Post />
+    </>
+  );
+};
 
 export default App;

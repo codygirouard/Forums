@@ -10,6 +10,7 @@ export const UserSchema = new Schema({
 export const PostSchema = new Schema({
   author: String,
   title: String,
+  Likes: { type: Number, default: 0 },
   body: String,
   date: { type: Date, default: Date.now },
   comments: [
