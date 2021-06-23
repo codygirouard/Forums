@@ -1,6 +1,7 @@
 import express from 'express';
 import routes from './routes/routes';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 const PORT = process.env.PORT || 3001;
 
@@ -14,6 +15,7 @@ mongoose.connect('mongodb://localhost/forumsDB', {
   useFindAndModify: false,
 });
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

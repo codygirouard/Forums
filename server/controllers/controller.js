@@ -6,18 +6,18 @@ const User = mongoose.model('User', UserSchema);
 const Post = mongoose.model('Post', PostSchema);
 
 export const addNewUser = (req, res) => {
-  const { pwd } = req.body;
+  const { pwd, name, email } = req.body;
   const saltRounds = 10;
 
-  bcrypt.hash(pwd, saltRounds, (err, hash) => {
+  bcrypt.hash(pwd, saltRounds, (err, pass_hash) => {
     if (err) {
       return res.send(err);
     }
 
     const info = {
-      name: req.body.name,
-      email: req.body.email,
-      pass_hash: hash,
+      name,
+      email,
+      pass_hash,
     };
     const newUser = new User(info);
 
@@ -75,19 +75,23 @@ export const makePost = (req, res) => {
 };
 
 export const makeComment = (req, res) => {
-  const { id, author, body } = req.body;
+  const { postId, author, body } = req.body;
 
   const comment = {
     author,
     body,
   };
 
-  Post.findByIdAndUpdate(id, { $push: { comments: comment } }, (err, post) => {
-    if (err) {
-      return res.send(err);
+  Post.findByIdAndUpdate(
+    postId,
+    { $push: { comments: comment }, $inc: { commentCount: 1 } },
+    (err, post) => {
+      if (err) {
+        return res.send(err);
+      }
+      res.json({ succ: 'New comment posted!' });
     }
-    res.json({ succ: 'New comment posted!' });
-  });
+  );
 };
 
 export const makeReply = (req, res) => {
@@ -100,7 +104,7 @@ export const makeReply = (req, res) => {
 
   Post.updateOne(
     { _id: postId, 'comments._id': commentId },
-    { $push: { 'comments.$.replies': reply } },
+    { $push: { 'comments.$.replies': reply }, $inc: { commentCount: 1 } },
     (err, post) => {
       if (err) {
         return res.send(err);
@@ -111,16 +115,16 @@ export const makeReply = (req, res) => {
 };
 
 export const getPosts = (req, res) => {
-  const { page } = req.body;
+  const { page } = req.params;
   const numPage = Math.max(0, Number(page) - 1);
   Post.find(
     {},
     null,
     {
       sort: '-date',
-      limit: 2,
+      limit: 10,
       skip: numPage * 10,
-      select: { _id: 1, author: 1, title: 1, body: 1 },
+      select: { _id: 1, author: 1, title: 1, commentCount: 1, likes: 1 },
     },
     (err, post) => {
       if (err) {
