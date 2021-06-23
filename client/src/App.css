@@ -1,4 +1,12 @@
-ul {
+/* NAVBAR */
+@media only screen and (min-width: 1545px) {
+  nav ul {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+}
+nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -7,15 +15,15 @@ ul {
   background-color: #f3f3f3;
 }
 
-li {
+nav li {
   float: left;
 }
 
-li:last-child {
+nav li:last-child {
   float: right;
 }
 
-li a {
+nav li a {
   display: block;
   color: #666;
   text-align: center;
@@ -23,6 +31,52 @@ li a {
   text-decoration: none;
 }
 
-.fa-home {
+nav .fa-home {
   font-size: 1.5em;
+}
+
+/* POSTS FEED */
+
+@media only screen and (min-width: 1545px) {
+  .posts {
+    margin-top: 65px;
+  }
+  .post {
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 1545px) {
+  .post {
+    margin: 0 1em;
+  }
+}
+
+.post {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1500px;
+  min-width: 260px;
+  border-bottom: 1px solid black;
+  padding: 0 0.5em;
+}
+
+.postContents {
+  margin-bottom: 0;
+  margin-right: 1em;
+}
+
+.postTitle {
+  margin-bottom: 0;
+}
+
+.postComments {
+  margin: 5px 0;
+}
+
+.postLikes {
+  align-self: center;
+  text-align: center;
+  padding: 0 10px;
+  min-width: 70px;
 }
