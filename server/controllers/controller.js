@@ -136,3 +136,13 @@ export const getPosts = (req, res) => {
     }
   );
 };
+
+export const getPost = (req, res) => {
+  const id = req.params.id;
+  Post.findById(id, (err, post) => {
+    if (err) {
+      return res.send(err);
+    }
+    res.json(post);
+  });
+};

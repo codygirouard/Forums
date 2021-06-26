@@ -5,11 +5,13 @@ import {
   makeComment,
   makeReply,
   getPosts,
+  getPost,
 } from '../controllers/controller';
 
 const routes = (app) => {
   app.route('/be/verifyAccountInfo').get(verifyUser);
   app.route('/be/getPosts/:page?').get(getPosts);
+  app.route('/be/getPost/:id').get(getPost);
   app.route('/be/createAccount').post(addNewUser);
   app.route('/be/newPost').post(makePost);
   app.route('/be/newComment').post(makeComment);

@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from './Header';
 
 const Post = ({ id, author, title, commentCount, likes }) => {
@@ -10,10 +11,12 @@ const Post = ({ id, author, title, commentCount, likes }) => {
 
   return (
     <div className="post" onClick={handleClick}>
-      <div className="postContents">
-        <h3 className="postTitle">{`${author}: ${title}`}</h3>
-        <p className="postComments">{`${commentCount} comments`}</p>
-      </div>
+      <Link to={id}>
+        <div className="postContents">
+          <h3 className="postTitle">{`${author}: ${title}`}</h3>
+          <p className="postComments">{`${commentCount} comments`}</p>
+        </div>
+      </Link>
       <p className="postLikes">
         <i className="far fa-thumbs-up" id="likes">
           {` ${likes}`}
