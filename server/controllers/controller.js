@@ -115,15 +115,15 @@ export const makeReply = (req, res) => {
 };
 
 export const getPosts = (req, res) => {
-  const { page } = req.params;
+  const page = req.params.page || 1;
   const numPage = Math.max(0, Number(page) - 1);
   Post.find(
     {},
     null,
     {
       sort: '-date',
-      limit: 10,
-      skip: numPage * 10,
+      limit: 15,
+      skip: numPage * 15,
       select: { _id: 1, author: 1, title: 1, commentCount: 1, likes: 1 },
     },
     (err, post) => {
