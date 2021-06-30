@@ -1,59 +1,112 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from './Header';
+import { dateToString } from './postDate';
 
-const Reply = () => {
+const Reply = ({ reply }) => {
+  const { author, body, date } = reply;
+
+  const time = dateToString(date);
+
   return (
     <div className="reply">
-      <h5>replier</h5>
-      <p>Body of a reply</p>
+      <div className="authorTime">
+        <h5>{author}</h5>
+        <p className="time">{time}</p>
+      </div>
+
+      <p className="bodyText">{body}</p>
     </div>
   );
 };
 
-const Replies = () => {
+const Replies = ({ replies }) => {
+  replies = replies.reverse();
   return (
     <div className="replies">
-      <Reply />
+      {replies.map((reply) => {
+        return <Reply key={reply._id} reply={reply} />;
+      })}
     </div>
   );
 };
 
-const CommentBox = ({ id }) => {
-  return (
-    <div className="commentBox">
-      <textarea rows="1" cols="1" name="text"></textarea>
-    </div>
-  );
-};
+const Comment = ({ postId, commentId, comment }) => {
+  const { author, body, replies, date } = comment;
+  const time = dateToString(date);
 
-const Comment = () => {
+  const [hideCommentBox, toggleHideCommentBox] = useReducer(
+    (hideCommentBox) => {
+      return !hideCommentBox;
+    },
+    true
+  );
+
+  const handleClick = () => {
+    toggleHideCommentBox();
+  };
+
   return (
     <div className="comment">
-      <h5>commentor</h5>
-      <p>Body of a comment</p>
-      <button>Reply</button>
-      <CommentBox />
-      <Replies />
+      <div className="authorTime">
+        <h5>{author}</h5>
+        <p className="time">{time}</p>
+      </div>
+      <p className="bodyText">{body}</p>
+      <button className="replyButton" onClick={handleClick}>
+        Reply
+      </button>
+      <div
+        className="comment"
+        style={{ display: hideCommentBox ? 'none' : 'block' }}
+      >
+        <textarea
+          className="commentBox"
+          aria-label="Comment Box"
+          rows="1"
+          cols="1"
+          name="text"
+        >
+          Type reply here...
+        </textarea>
+        <button className="submitButton">Submit Reply</button>
+      </div>
+      <Replies replies={replies} />
     </div>
   );
 };
 
 const Comments = ({ id, comments }) => {
+  comments = comments.reverse();
   return (
     <div className="comments">
-      <Comment />
+      {comments.map((comment) => {
+        return (
+          <Comment
+            key={comment._id}
+            postId={id}
+            commentId={comment._id}
+            comment={comment}
+          />
+        );
+      })}
     </div>
   );
 };
 
-const Content = ({ id, likes, author, body, title, date }) => {
+const Content = ({ likes, author, body, title, date }) => {
+  const time = dateToString(date);
   return (
     <div className="content">
-      <p>{`${likes} Likes`}</p>
-      <h3>{title}</h3>
-      <h5>{author}</h5>
-      <p>{body}</p>
+      <i className="far fa-thumbs-up likes">{` ${likes}`}</i>
+      <div className="contentPost">
+        <h3>{title}</h3>
+        <div className="authorTime">
+          <h5>{author}</h5>
+          <p className="time">{time}</p>
+        </div>
+        <p className="bodyText">{body}</p>
+      </div>
     </div>
   );
 };
@@ -81,17 +134,28 @@ export const Post = () => {
     return (
       <>
         <Header />
-
-        <Content
-          id={_id}
-          likes={likes}
-          author={author}
-          body={body}
-          title={title}
-          date={date}
-        />
-        <CommentBox id={_id} />
-        <Comments id={_id} comments={comments} />
+        <div className="postContainer">
+          <Content
+            likes={likes}
+            author={author}
+            body={body}
+            title={title}
+            date={date}
+          />
+          <div className="comment">
+            <textarea
+              className="commentBox"
+              aria-label="Comment Box"
+              rows="1"
+              cols="1"
+              name="text"
+            >
+              Type comment here...
+            </textarea>
+            <button className="submitButton">Submit Reply</button>
+          </div>
+          <Comments id={_id} comments={comments} />
+        </div>
       </>
     );
   }

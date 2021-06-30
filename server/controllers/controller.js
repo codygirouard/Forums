@@ -124,7 +124,14 @@ export const getPosts = (req, res) => {
       sort: '-date',
       limit: 15,
       skip: numPage * 15,
-      select: { _id: 1, author: 1, title: 1, commentCount: 1, likes: 1 },
+      select: {
+        _id: 1,
+        author: 1,
+        title: 1,
+        commentCount: 1,
+        likes: 1,
+        date: 1,
+      },
     },
     (err, post) => {
       if (err) {

@@ -1,26 +1,24 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from './Header';
+import { dateToString } from './postDate';
 
-const Post = ({ id, author, title, commentCount, likes }) => {
-  const handleClick = (e) => {
-    if (e.target.id !== 'likes') {
-      console.log(`${id} clicked`);
-    }
-  };
+const Post = ({ id, author, title, commentCount, likes, date }) => {
+  const dateString = dateToString(date);
 
   return (
-    <div className="post" onClick={handleClick}>
-      <Link to={id}>
+    <div className="post">
+      <Link to={`post/${id}`}>
         <div className="postContents">
           <h3 className="postTitle">{`${author}: ${title}`}</h3>
-          <p className="postComments">{`${commentCount} comments`}</p>
+          <p className="postComments">
+            {`${commentCount} comments`}
+            <span> &#x25CF; {dateString}</span>
+          </p>
         </div>
       </Link>
       <p className="postLikes">
-        <i className="far fa-thumbs-up" id="likes">
-          {` ${likes}`}
-        </i>
+        <i className="far fa-thumbs-up">{` ${likes}`}</i>
       </p>
     </div>
   );
@@ -48,7 +46,7 @@ const Posts = ({ pageNum }) => {
   if (!data) {
     return <h1>Loading...</h1>;
   } else {
-    return data.map(({ _id, author, title, commentCount, likes }) => (
+    return data.map(({ _id, author, title, commentCount, likes, date }) => (
       <Post
         key={_id}
         id={_id}
@@ -56,6 +54,7 @@ const Posts = ({ pageNum }) => {
         title={title}
         commentCount={commentCount}
         likes={likes}
+        date={date}
       />
     ));
   }
@@ -63,7 +62,8 @@ const Posts = ({ pageNum }) => {
 
 const Page = () => {
   const [currPage, setCurrPage] = useState(1);
-  const [loading, toggleLoading] = useReducer((loading) => !loading, false);
+  let loading = false;
+  let timeout = null;
 
   const nextPage = () => {
     setCurrPage(currPage + 1);
@@ -75,9 +75,11 @@ const Page = () => {
         document.body.offsetHeight - 2 &&
       !loading
     ) {
-      toggleLoading();
+      loading = true;
       nextPage();
-      setTimeout(toggleLoading, 500);
+      timeout = setTimeout(() => {
+        loading = false;
+      }, 500);
     }
   };
 
@@ -85,6 +87,7 @@ const Page = () => {
     window.addEventListener('scroll', handleScroll);
 
     return () => {
+      clearTimeout(timeout);
       window.removeEventListener('scroll', handleScroll);
     };
   });

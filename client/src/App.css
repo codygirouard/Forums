@@ -19,7 +19,7 @@ nav li {
   float: left;
 }
 
-nav li:last-child {
+header nav li:last-child {
   float: right;
 }
 
@@ -56,7 +56,7 @@ nav .fa-home {
   display: flex;
   justify-content: space-between;
   max-width: 1500px;
-  min-width: 260px;
+  min-width: 175px;
   border-bottom: 1px solid black;
   padding: 0 0.5em;
 }
@@ -79,4 +79,111 @@ nav .fa-home {
   text-align: center;
   padding: 0 10px;
   min-width: 70px;
+}
+
+/* POST PAGE */
+@media only screen and (min-width: 1545px) {
+  .postContainer {
+    margin: 65px auto 0 auto;
+  }
+}
+
+@media only screen and (max-width: 1545px) {
+  .postContainer {
+    margin: 0 1em;
+  }
+}
+
+.postContainer {
+  max-width: 1500px;
+  min-width: 175px;
+}
+
+.content {
+  display: flex;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid black;
+}
+
+.contentPost {
+  flex-grow: 1;
+}
+
+.contentPost h3 {
+  margin: 0.3em 0;
+}
+
+.likes {
+  align-self: center;
+  text-align: center;
+  margin: 0 auto;
+  width: 70px;
+  flex-shrink: 1;
+}
+
+.authorTime :is(h5, p) {
+  display: inline;
+  padding-right: 0.5em;
+}
+
+.authorTime p {
+  font-size: 0.65em;
+}
+
+.bodyText {
+  margin: 0.25em 0;
+}
+
+.replyButton {
+  margin: 0;
+}
+
+.replies {
+  margin-left: 2em;
+}
+
+.commentBox {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  height: 100px;
+  margin: 0.5em 0 0 0;
+}
+
+.replyButton {
+  display: block;
+}
+
+.comment {
+  margin-bottom: 1em;
+}
+
+/* LOGIN FORMS */
+
+.centerScreen {
+  height: 100vh;
+  position: relative;
+}
+
+.loginContainer {
+  border: 1px solid black;
+  margin: 0;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  max-width: 600px;
+  padding: 1em;
+}
+
+.loginContainer input {
+  display: inline-block;
+  width: 98%;
+  margin: 0.25em;
+}
+
+.swapLogin p {
+  text-align: right;
 }
