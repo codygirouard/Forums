@@ -44,7 +44,7 @@ const Posts = ({ pageNum }) => {
   }, [pageNum]);
 
   if (!data) {
-    return <h1>Loading...</h1>;
+    return <div className="loader"></div>;
   } else {
     return data.map(({ _id, author, title, commentCount, likes, date }) => (
       <Post
@@ -62,7 +62,7 @@ const Posts = ({ pageNum }) => {
 
 const Page = () => {
   const [currPage, setCurrPage] = useState(1);
-  let loading = false;
+  const [loading, setLoading] = useState(false);
   let timeout = null;
 
   const nextPage = () => {
@@ -75,10 +75,10 @@ const Page = () => {
         document.body.offsetHeight - 2 &&
       !loading
     ) {
-      loading = true;
+      setLoading(true);
       nextPage();
       timeout = setTimeout(() => {
-        loading = false;
+        setLoading(false);
       }, 500);
     }
   };
@@ -102,7 +102,7 @@ const Page = () => {
 export const Feed = () => {
   return (
     <>
-      <Header />
+      <Header posts={true} />
       <Page />
     </>
   );
