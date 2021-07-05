@@ -5,13 +5,35 @@ import { UserSchema, PostSchema } from '../models/model';
 const User = mongoose.model('User', UserSchema);
 const Post = mongoose.model('Post', PostSchema);
 
-export const addNewUser = (req, res) => {
+export const addNewUser = async (req, res) => {
   const { pwd, name, email } = req.body;
+  if (!pwd || !name || !email) {
+    return res.json({
+      err: `Password: ${pwd ? 'found' : 'missing'}, username: ${
+        name ? 'found' : 'missing'
+      }, email: ${email ? 'found' : 'missing'}`,
+    });
+  }
+
   const saltRounds = 10;
+
+  const existingUser = await User.findOne({
+    $or: [{ name: name }, { email: email }],
+  });
+
+  if (existingUser) {
+    if (existingUser.name === name && existingUser.email === email) {
+      return res.json({ err: 'Username and email taken' });
+    } else if (existingUser.name === name) {
+      return res.json({ err: 'Username taken' });
+    } else {
+      return res.json({ err: 'Email taken' });
+    }
+  }
 
   bcrypt.hash(pwd, saltRounds, (err, pass_hash) => {
     if (err) {
-      return res.send(err);
+      return res.json({ err: err });
     }
 
     const info = {
@@ -23,15 +45,23 @@ export const addNewUser = (req, res) => {
 
     newUser.save((err, user) => {
       if (err) {
-        return res.send(err);
+        return res.json({ err: err });
       }
-      res.json(user);
+      res.json({ succ: name });
     });
   });
 };
 
-export const verifyUser = (req, res) => {
+export const userLogin = (req, res) => {
   const { pwd, username } = req.body;
+
+  if (!pwd || !username) {
+    return res.json({
+      err: `Password: ${pwd ? 'found' : 'missing'}, username: ${
+        username ? 'found' : 'missing'
+      }`,
+    });
+  }
 
   User.findOne(
     { $or: [{ name: username }, { email: username }] },
@@ -47,7 +77,7 @@ export const verifyUser = (req, res) => {
           return res.send(err);
         }
         if (result) {
-          res.json({ succ: 'Correct password!' });
+          res.json({ succ: user.name });
         } else {
           res.json({ err: 'Incorrect password!' });
         }
@@ -58,6 +88,14 @@ export const verifyUser = (req, res) => {
 
 export const makePost = (req, res) => {
   const { author, title, body } = req.body;
+
+  if (!author || !title || !body) {
+    return res.json({
+      err: `Author: ${author ? 'found' : 'missing'}, title: ${
+        title ? 'found' : 'missing'
+      }, body: ${body ? 'found' : 'missing'}`,
+    });
+  }
 
   const info = {
     author,
@@ -76,6 +114,14 @@ export const makePost = (req, res) => {
 
 export const makeComment = (req, res) => {
   const { postId, author, body } = req.body;
+
+  if (!postId || !author || !body) {
+    return res.json({
+      err: `PostID: ${postId ? 'found' : 'missing'}, author: ${
+        author ? 'found' : 'missing'
+      }, body: ${body ? 'found' : 'missing'}`,
+    });
+  }
 
   const comment = {
     author,
@@ -96,6 +142,16 @@ export const makeComment = (req, res) => {
 
 export const makeReply = (req, res) => {
   const { postId, commentId, author, body } = req.body;
+
+  if (!postId || !commentId || !author || !body) {
+    return res.json({
+      err: `PostID: ${postId ? 'found' : 'missing'}, commentID: ${
+        commentId ? 'found' : 'missing'
+      }, author: ${author ? 'found' : 'missing'}, body: ${
+        body ? 'found' : 'missing'
+      }`,
+    });
+  }
 
   const reply = {
     author,
@@ -122,8 +178,8 @@ export const getPosts = (req, res) => {
     null,
     {
       sort: '-date',
-      limit: 15,
-      skip: numPage * 15,
+      limit: 25,
+      skip: numPage * 25,
       select: {
         _id: 1,
         author: 1,
