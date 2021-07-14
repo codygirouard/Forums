@@ -97,6 +97,7 @@ export const SignIn = () => {
             <input
               id="username"
               className="formField"
+              autoFocus={true}
               type="text"
               placeholder="Username"
               aria-invalid={errors.username ? 'true' : 'false'}
@@ -142,20 +143,20 @@ export const SignIn = () => {
           )}
 
           <div className="login">
-            <button type="submit" class="btn">
+            <button type="submit" className="btn">
               <svg
                 width="180px"
                 height="60px"
                 viewBox="0 0 180 60"
-                class="border"
+                className="border"
               >
                 <polyline
                   points="179,1 179,59 1,59 1,1 179,1"
-                  class="bg-line"
+                  className="bg-line"
                 />
                 <polyline
                   points="179,1 179,59 1,59 1,1 179,1"
-                  class="hl-line"
+                  className="hl-line"
                 />
               </svg>
               <span>Login</span>
@@ -270,6 +271,7 @@ export const SignUp = () => {
             <input
               id="username"
               className="formField"
+              autoFocus={true}
               type="text"
               placeholder="Username"
               aria-invalid={errors.username ? 'true' : 'false'}
@@ -340,20 +342,20 @@ export const SignUp = () => {
           )}
 
           <div className="register">
-            <button type="submit" class="btn">
+            <button type="submit" className="btn">
               <svg
                 width="180px"
                 height="60px"
                 viewBox="0 0 180 60"
-                class="border"
+                className="border"
               >
                 <polyline
                   points="179,1 179,59 1,59 1,1 179,1"
-                  class="bg-line"
+                  className="bg-line"
                 />
                 <polyline
                   points="179,1 179,59 1,59 1,1 179,1"
-                  class="hl-line"
+                  className="hl-line"
                 />
               </svg>
               <span>Register</span>
