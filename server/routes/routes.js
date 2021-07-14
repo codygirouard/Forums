@@ -6,6 +6,8 @@ import {
   makeReply,
   getPosts,
   getPost,
+  likePost,
+  unlikePost,
 } from '../controllers/controller';
 
 const routes = (app) => {
@@ -14,6 +16,8 @@ const routes = (app) => {
   app.route('/be/userLogin').post(userLogin);
   app.route('/be/createAccount').post(addNewUser);
   app.route('/be/newPost').post(makePost);
+  app.route('/be/likePost').post(likePost);
+  app.route('/be/unlikePost').post(unlikePost);
   app.route('/be/newComment').post(makeComment);
   app.route('/be/newReply').post(makeReply);
 
