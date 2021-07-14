@@ -67,14 +67,14 @@ export const userLogin = (req, res) => {
     { $or: [{ name: username }, { email: username }] },
     function (err, user) {
       if (err) {
-        return res.send(err);
+        return res.json({ err });
       } else if (!user) {
         return res.json({ err: 'No user found!' });
       }
 
       bcrypt.compare(pwd, user.pass_hash, (err, result) => {
         if (err) {
-          return res.send(err);
+          return res.json({ err });
         }
         if (result) {
           res.json({ succ: user.name });
@@ -106,9 +106,9 @@ export const makePost = (req, res) => {
 
   newPost.save((err, post) => {
     if (err) {
-      return res.send(err);
+      return res.json({ err });
     }
-    res.json(post);
+    res.json({ succ: 'Posted' });
   });
 };
 
@@ -131,11 +131,12 @@ export const makeComment = (req, res) => {
   Post.findByIdAndUpdate(
     postId,
     { $push: { comments: comment }, $inc: { commentCount: 1 } },
+    { new: true },
     (err, post) => {
       if (err) {
-        return res.send(err);
+        return res.json({ err });
       }
-      res.json({ succ: 'New comment posted!' });
+      res.json({ succ: 'New comment posted!', result: post });
     }
   );
 };
@@ -163,7 +164,7 @@ export const makeReply = (req, res) => {
     { $push: { 'comments.$.replies': reply }, $inc: { commentCount: 1 } },
     (err, post) => {
       if (err) {
-        return res.send(err);
+        return res.json({ err });
       }
       res.json({ succ: 'New reply posted!' });
     }
@@ -186,12 +187,13 @@ export const getPosts = (req, res) => {
         title: 1,
         commentCount: 1,
         likes: 1,
+        usersLiked: 1,
         date: 1,
       },
     },
     (err, post) => {
       if (err) {
-        return res.send(err);
+        return res.json({ err });
       } else if (post.length == 0) {
         return res.json({ err: 'No posts found!' });
       }
@@ -204,8 +206,54 @@ export const getPost = (req, res) => {
   const id = req.params.id;
   Post.findById(id, (err, post) => {
     if (err) {
-      return res.send(err);
+      return res.json({ err });
     }
     res.json(post);
   });
+};
+
+export const likePost = (req, res) => {
+  const { postId, username } = req.body;
+
+  if (!postId || !username) {
+    return res.json({
+      err: `PostID: ${postId ? 'found' : 'missing'}, username: ${
+        username ? 'found' : 'missing'
+      }`,
+    });
+  }
+
+  Post.findByIdAndUpdate(
+    postId,
+    { $push: { usersLiked: username }, $inc: { likes: 1 } },
+    (err, post) => {
+      if (err) {
+        return res.json({ err });
+      }
+      res.json({ succ: 'Liked post!' });
+    }
+  );
+};
+
+export const unlikePost = (req, res) => {
+  const { postId, username } = req.body;
+
+  if (!postId || !username) {
+    return res.json({
+      err: `PostID: ${postId ? 'found' : 'missing'}, username: ${
+        username ? 'found' : 'missing'
+      }`,
+    });
+  }
+
+  Post.findByIdAndUpdate(
+    postId,
+    { $pullAll: { usersLiked: [username] }, $inc: { likes: -1 } },
+    (err, post) => {
+      if (err) {
+        return res.json({ err });
+      }
+      res.json({ succ: 'Unliked post!' });
+    }
+  );
 };
