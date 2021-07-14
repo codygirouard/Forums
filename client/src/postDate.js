@@ -27,6 +27,9 @@ const convertMS = (milliseconds) => {
 };
 
 export const dateToString = (date) => {
+  if (date === 'A few seconds ago...') {
+    return 'A few seconds ago...';
+  }
   date = new Date(date);
   const now = new Date();
   const { years, months, days, hours, minutes, seconds } = convertMS(
