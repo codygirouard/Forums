@@ -11,6 +11,7 @@ export const PostSchema = new Schema({
   author: String,
   title: String,
   likes: { type: Number, default: 0 },
+  usersLiked: [String],
   body: String,
   date: { type: Date, default: Date.now },
   commentCount: { type: Number, default: 0 },
