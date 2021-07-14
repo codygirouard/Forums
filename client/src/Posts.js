@@ -1,25 +1,42 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Header } from './Header';
+import { Link, useNavigate } from 'react-router-dom';
+import { Header } from './header';
 import { dateToString } from './postDate';
+import { LikeButton } from './like';
+import Alert from './alert';
 
-const Post = ({ id, author, title, commentCount, likes, date }) => {
+const NewPostButton = () => {
+  const nav = useNavigate();
+  const handleClick = () => {
+    if (localStorage.getItem('name')) {
+      nav('/newPost');
+    } else {
+      const alertModal = document.getElementById('alertModal');
+      const alertText = document.getElementById('alertText');
+      alertText.innerHTML = 'You need to login to make new posts!';
+      alertModal.style.display = 'block';
+    }
+  };
+  return (
+    <button className="newPostButton" onClick={handleClick}>
+      +
+    </button>
+  );
+};
+
+const Post = ({ id, author, title, commentCount, likes, usersLiked, date }) => {
   const dateString = dateToString(date);
 
   return (
     <div className="post">
-      <Link to={`post/${id}`}>
+      <LikeButton totalLikes={likes} usersLiked={usersLiked} postId={id} />
+      <Link to={`post/${id}`} className="commentLink">
         <div className="postContents">
-          <h3 className="postTitle">{`${author}: ${title}`}</h3>
-          <p className="postComments">
-            {`${commentCount} comments`}
-            <span> &#x25CF; {dateString}</span>
-          </p>
+          <h3 className="postTitle">{title}</h3>
+          <h4 className="postAuthor">{`Posted by ${author} ${dateString}`}</h4>
+          <p className="postComments">{`${commentCount} comments`}</p>
         </div>
       </Link>
-      <p className="postLikes">
-        <i className="far fa-thumbs-up">{` ${likes}`}</i>
-      </p>
     </div>
   );
 };
@@ -46,17 +63,20 @@ const Posts = ({ pageNum }) => {
   if (!data) {
     return <div className="loader"></div>;
   } else {
-    return data.map(({ _id, author, title, commentCount, likes, date }) => (
-      <Post
-        key={_id}
-        id={_id}
-        author={author}
-        title={title}
-        commentCount={commentCount}
-        likes={likes}
-        date={date}
-      />
-    ));
+    return data.map(
+      ({ _id, author, title, commentCount, likes, usersLiked, date }) => (
+        <Post
+          key={_id}
+          id={_id}
+          author={author}
+          title={title}
+          commentCount={commentCount}
+          likes={likes}
+          usersLiked={usersLiked}
+          date={date}
+        />
+      )
+    );
   }
 };
 
@@ -102,8 +122,10 @@ const Page = () => {
 export const Feed = () => {
   return (
     <>
-      <Header posts={true} />
+      <Header scroll={true} />
       <Page />
+      <NewPostButton />
+      <Alert />
     </>
   );
 };
