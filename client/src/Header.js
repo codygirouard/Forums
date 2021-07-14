@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const Header = ({ posts }) => {
+export const Header = ({ scroll }) => {
   const [loggedIn, setLoggedIn] = useState();
 
   useEffect(() => {
     setLoggedIn(!!localStorage.getItem('name'));
   }, []);
 
-  const handleClick = () => {
-    setLoggedIn(false);
+  const logout = () => {
     localStorage.removeItem('name');
+    window.location.reload();
+  };
+
+  const scrollToTop = () => {
+    if (scroll) {
+      window.scrollTo(0, 0);
+    }
   };
 
   return (
@@ -18,7 +24,7 @@ export const Header = ({ posts }) => {
       <nav>
         <ul>
           <li>
-            <Link to="/">
+            <Link to="/" onClick={scrollToTop}>
               <i className="fas fa-home"></i>
             </Link>
           </li>
@@ -32,7 +38,7 @@ export const Header = ({ posts }) => {
                 </>
               )}
 
-              {loggedIn && <button onClick={handleClick}>Logout</button>}
+              {loggedIn && <button onClick={logout}>Logout</button>}
             </div>
           </li>
         </ul>
