@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
-  const [likes, setLikes] = useState(totalLikes);
-  const [liked, setLiked] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [likes, setLikes] = useState(totalLikes); // total like count of post
+  const [isLiked, setIsLiked] = useState(false); // is post liked by user
+  const [users, setUsers] = useState([]); // all users that liked post
   const user = localStorage.getItem('name');
 
   const handleClick = () => {
@@ -11,6 +11,7 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
       postId,
       username: user,
     };
+
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -18,23 +19,28 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
     };
 
     if (user) {
-      if (liked) {
+      if (isLiked) {
         setLikes(likes - 1);
         setUsers(users.filter((name) => name !== user));
+
         fetch('http://localhost:3001/be/unlikePost', options).then((response) =>
           response.json()
         );
       } else {
         setLikes(likes + 1);
         setUsers((oldUsers) => [...oldUsers, user]);
+
         fetch('http://localhost:3001/be/likePost', options).then((response) =>
           response.json()
         );
       }
-      setLiked(!liked);
+
+      setIsLiked(!isLiked);
     } else {
+      // not logged in, alert user of error
       const alertModal = document.getElementById('alertModal');
       const alertText = document.getElementById('alertText');
+
       alertText.innerHTML = 'You need to login to like posts!';
       alertModal.style.display = 'block';
     }
@@ -43,7 +49,7 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
   useEffect(() => {
     if (usersLiked) {
       setUsers(usersLiked);
-      setLiked(usersLiked.indexOf(user) >= 0);
+      setIsLiked(usersLiked.indexOf(user) >= 0);
     }
   }, [usersLiked, user]);
 
@@ -54,7 +60,7 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
           <g>
             <title>Like</title>
             <path
-              className={liked ? 'fullHeart' : 'emptyHeart'}
+              className={isLiked ? 'fullHeart' : 'emptyHeart'}
               d="m24.95551,11.32701c9.87674,-25.35266 48.57414,0 0,32.59628c-48.57414,-32.59628 -9.87674,-57.94894 0,-32.59628z"
             />
           </g>
@@ -63,7 +69,7 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
             y="55%"
             textAnchor="middle"
             dy=".3em"
-            fill={liked ? '#fff' : '#000'}
+            fill={isLiked ? '#fff' : '#000'}
           >
             {likes}
           </text>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const Header = ({ scroll }) => {
+const Header = ({ scroll, login }) => {
   const [loggedIn, setLoggedIn] = useState();
 
   useEffect(() => {
@@ -18,6 +18,20 @@ export const Header = ({ scroll }) => {
       window.scrollTo(0, 0);
     }
   };
+
+  if (login) {
+    return (
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">
+              <i className="fas fa-home"></i>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    );
+  }
 
   return (
     <header>
@@ -46,3 +60,5 @@ export const Header = ({ scroll }) => {
     </header>
   );
 };
+
+export default Header;

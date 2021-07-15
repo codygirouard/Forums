@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-
 const Alert = () => {
+  // close alert modal on pressing 'X'
   const closeButton = () => {
     document.getElementById('alertModal').style.display = 'none';
   };
 
+  // close alert modal on pressing black background
   const clickOutside = (e) => {
     const modal = document.getElementById('alertModal');
     if (e.target === modal) {
@@ -12,7 +12,6 @@ const Alert = () => {
     }
   };
 
-  useEffect(() => {});
   return (
     <div id="alertModal" onClick={clickOutside}>
       <div className="alertContent">

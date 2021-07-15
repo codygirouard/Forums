@@ -6,6 +6,7 @@ const User = mongoose.model('User', UserSchema);
 const Post = mongoose.model('Post', PostSchema);
 
 export const addNewUser = async (req, res) => {
+  // verify all body parameters are received
   const { pwd, name, email } = req.body;
   if (!pwd || !name || !email) {
     return res.json({
@@ -21,6 +22,7 @@ export const addNewUser = async (req, res) => {
     $or: [{ name: name }, { email: email }],
   });
 
+  // error user already exists
   if (existingUser) {
     if (existingUser.name === name && existingUser.email === email) {
       return res.json({ err: 'Username and email taken' });
@@ -31,6 +33,7 @@ export const addNewUser = async (req, res) => {
     }
   }
 
+  // create user account
   bcrypt.hash(pwd, saltRounds, (err, pass_hash) => {
     if (err) {
       return res.json({ err: err });
@@ -53,8 +56,8 @@ export const addNewUser = async (req, res) => {
 };
 
 export const userLogin = (req, res) => {
+  // verify all body parameters are received
   const { pwd, username } = req.body;
-
   if (!pwd || !username) {
     return res.json({
       err: `Password: ${pwd ? 'found' : 'missing'}, username: ${
@@ -66,19 +69,23 @@ export const userLogin = (req, res) => {
   User.findOne(
     { $or: [{ name: username }, { email: username }] },
     function (err, user) {
+      // wrong user
       if (err) {
         return res.json({ err });
       } else if (!user) {
         return res.json({ err: 'No user found!' });
       }
 
+      // correct user
       bcrypt.compare(pwd, user.pass_hash, (err, result) => {
         if (err) {
           return res.json({ err });
         }
         if (result) {
+          // correct pass
           res.json({ succ: user.name });
         } else {
+          // wrong pass
           res.json({ err: 'Incorrect password!' });
         }
       });
@@ -87,8 +94,8 @@ export const userLogin = (req, res) => {
 };
 
 export const makePost = (req, res) => {
+  // verify all body parameters are received
   const { author, title, body } = req.body;
-
   if (!author || !title || !body) {
     return res.json({
       err: `Author: ${author ? 'found' : 'missing'}, title: ${
@@ -104,7 +111,7 @@ export const makePost = (req, res) => {
   };
   const newPost = new Post(info);
 
-  newPost.save((err, post) => {
+  newPost.save((err) => {
     if (err) {
       return res.json({ err });
     }
@@ -113,8 +120,8 @@ export const makePost = (req, res) => {
 };
 
 export const makeComment = (req, res) => {
+  // verify all body parameters are received
   const { postId, author, body } = req.body;
-
   if (!postId || !author || !body) {
     return res.json({
       err: `PostID: ${postId ? 'found' : 'missing'}, author: ${
@@ -142,8 +149,8 @@ export const makeComment = (req, res) => {
 };
 
 export const makeReply = (req, res) => {
+  // verify all body parameters are received
   const { postId, commentId, author, body } = req.body;
-
   if (!postId || !commentId || !author || !body) {
     return res.json({
       err: `PostID: ${postId ? 'found' : 'missing'}, commentID: ${
@@ -162,7 +169,7 @@ export const makeReply = (req, res) => {
   Post.updateOne(
     { _id: postId, 'comments._id': commentId },
     { $push: { 'comments.$.replies': reply }, $inc: { commentCount: 1 } },
-    (err, post) => {
+    (err) => {
       if (err) {
         return res.json({ err });
       }
@@ -179,8 +186,8 @@ export const getPosts = (req, res) => {
     null,
     {
       sort: '-date',
-      limit: 25,
-      skip: numPage * 25,
+      limit: 15,
+      skip: numPage * 15,
       select: {
         _id: 1,
         author: 1,
@@ -213,8 +220,8 @@ export const getPost = (req, res) => {
 };
 
 export const likePost = (req, res) => {
+  // verify all body parameters are received
   const { postId, username } = req.body;
-
   if (!postId || !username) {
     return res.json({
       err: `PostID: ${postId ? 'found' : 'missing'}, username: ${
@@ -226,7 +233,7 @@ export const likePost = (req, res) => {
   Post.findByIdAndUpdate(
     postId,
     { $push: { usersLiked: username }, $inc: { likes: 1 } },
-    (err, post) => {
+    (err) => {
       if (err) {
         return res.json({ err });
       }
@@ -236,8 +243,8 @@ export const likePost = (req, res) => {
 };
 
 export const unlikePost = (req, res) => {
+  // verify all body parameters are received
   const { postId, username } = req.body;
-
   if (!postId || !username) {
     return res.json({
       err: `PostID: ${postId ? 'found' : 'missing'}, username: ${
@@ -249,7 +256,7 @@ export const unlikePost = (req, res) => {
   Post.findByIdAndUpdate(
     postId,
     { $pullAll: { usersLiked: [username] }, $inc: { likes: -1 } },
-    (err, post) => {
+    (err) => {
       if (err) {
         return res.json({ err });
       }

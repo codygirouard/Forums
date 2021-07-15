@@ -1,22 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-
-const Header = () => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">
-            <i className="fas fa-home"></i>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
-};
+import Header from './header';
 
 export const SignIn = () => {
+  // error texts for signin
   const userErrors = {
     required: 'Username is required to login',
     minLength: 'Username must be at least 3 characters long',
@@ -89,7 +77,7 @@ export const SignIn = () => {
 
   return (
     <div className="centerScreen">
-      <Header />
+      <Header login={true} />
       <div className="loginContainer">
         <h2 className="formTitle">Login</h2>
         <form onSubmit={handleSubmit(onSubmit, onErrors)}>
@@ -175,6 +163,7 @@ export const SignIn = () => {
 };
 
 export const SignUp = () => {
+  // error texts
   const userErrors = {
     required: 'Username is required to register',
     minLength: 'Username must be at least 3 characters long',
@@ -263,7 +252,7 @@ export const SignUp = () => {
 
   return (
     <div className="centerScreen">
-      <Header />
+      <Header login={true} />
       <div className="loginContainer">
         <h2 className="formTitle">Create An Account</h2>
         <form onSubmit={handleSubmit(onSubmit, onErrors)}>

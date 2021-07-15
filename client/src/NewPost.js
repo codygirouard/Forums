@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { Header } from './header';
+import Header from './header';
 
 export const NewPost = () => {
   const titleErrors = {

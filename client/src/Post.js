@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Header } from './header';
+import { useNavigate, useParams } from 'react-router-dom';
+import Header from './header';
 import { dateToString } from './postDate';
 import { LikeButton } from './like';
 import Alert from './alert';
@@ -49,9 +49,19 @@ const Comment = ({ postId, commentId, comment }) => {
   );
 
   const toggleReplyBox = () => {
-    toggleHideCommentBox();
+    const user = localStorage.getItem('name');
+    const alertModal = document.getElementById('alertModal');
+    const alertText = document.getElementById('alertText');
+
+    if (!user) {
+      alertText.innerHTML = 'You need to login to reply!';
+      alertModal.style.display = 'block';
+    } else {
+      toggleHideCommentBox();
+    }
   };
 
+  // reply box submit button clicked
   const handleClick = ({ target }) => {
     const user = localStorage.getItem('name');
     const alertModal = document.getElementById('alertModal');
@@ -196,12 +206,20 @@ export const Post = () => {
 
   const [data, setData] = useState(null);
   const [commentText, setText] = useState('Type comment here...');
+  const nav = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:3001/be/getPost/${id}`)
       .then((response) => response.json())
-      .then(setData);
-  }, [id]);
+      .then((response) => {
+        // post id not found
+        if (!response || response.err) {
+          nav('/oops');
+        } else {
+          setData(response);
+        }
+      });
+  }, [nav, id]);
 
   const handleInput = ({ target }) => {
     target.style.height = '';
@@ -221,6 +239,7 @@ export const Post = () => {
     }
   };
 
+  // comment submit button clicked
   const handleClick = ({ target }) => {
     const user = localStorage.getItem('name');
     const alertModal = document.getElementById('alertModal');

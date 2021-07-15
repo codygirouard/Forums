@@ -4,6 +4,7 @@ import { Feed } from './Posts';
 import { Post } from './Post';
 import { SignIn, SignUp } from './Login';
 import { NewPost } from './NewPost';
+import NotFound from './NotFound';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/newpost" element={<NewPost />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

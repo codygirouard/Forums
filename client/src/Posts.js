@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Header } from './header';
+import Header from './header';
 import { dateToString } from './postDate';
 import { LikeButton } from './like';
 import Alert from './alert';
@@ -11,6 +11,7 @@ const NewPostButton = () => {
     if (localStorage.getItem('name')) {
       nav('/newPost');
     } else {
+      // user not logged in, cannot make new posts
       const alertModal = document.getElementById('alertModal');
       const alertText = document.getElementById('alertText');
       alertText.innerHTML = 'You need to login to make new posts!';
@@ -44,6 +45,7 @@ const Post = ({ id, author, title, commentCount, likes, usersLiked, date }) => {
 const Posts = ({ pageNum }) => {
   const [data, setData] = useState(null);
 
+  // load 15 most recent posts on start
   useEffect(() => {
     fetch(`http://localhost:3001/be/getPosts/${pageNum}`)
       .then((response) => response.json())
