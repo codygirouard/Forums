@@ -86,7 +86,7 @@ const Comment = ({ postId, commentId, comment }) => {
         body: JSON.stringify(replyInfo),
       };
 
-      fetch('http://localhost:3001/be/newReply', options);
+      fetch('/be/newReply', options);
       setReplies((oldReplies) => [
         ...oldReplies,
         {
@@ -209,7 +209,7 @@ export const Post = () => {
   const nav = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:3001/be/getPost/${id}`)
+    fetch(`/be/getPost/${id}`)
       .then((response) => response.json())
       .then((response) => {
         // post id not found
@@ -217,6 +217,7 @@ export const Post = () => {
           nav('/oops');
         } else {
           setData(response);
+          document.title = `${response.title} - Denton Forums`;
         }
       });
   }, [nav, id]);
@@ -263,7 +264,7 @@ export const Post = () => {
         body: JSON.stringify(commentInfo),
       };
 
-      fetch('http://localhost:3001/be/newComment', options)
+      fetch('/be/newComment', options)
         .then((response) => response.json())
         .then((response) => setData(response.result));
       setText('Type comment here...');

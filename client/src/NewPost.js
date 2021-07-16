@@ -29,6 +29,7 @@ export const NewPost = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'New Post - Denton Forums';
     if (!localStorage.getItem('name')) {
       navigate('/');
     }
@@ -50,8 +51,8 @@ export const NewPost = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postInfo),
     };
-    const res = await fetch('http://localhost:3001/be/newPost', options).then(
-      (response) => response.json()
+    const res = await fetch('/be/newPost', options).then((response) =>
+      response.json()
     );
 
     if (res.succ) {

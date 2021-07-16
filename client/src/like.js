@@ -23,16 +23,12 @@ export const LikeButton = ({ totalLikes, usersLiked, postId }) => {
         setLikes(likes - 1);
         setUsers(users.filter((name) => name !== user));
 
-        fetch('http://localhost:3001/be/unlikePost', options).then((response) =>
-          response.json()
-        );
+        fetch('/be/unlikePost', options).then((response) => response.json());
       } else {
         setLikes(likes + 1);
         setUsers((oldUsers) => [...oldUsers, user]);
 
-        fetch('http://localhost:3001/be/likePost', options).then((response) =>
-          response.json()
-        );
+        fetch('/be/likePost', options).then((response) => response.json());
       }
 
       setIsLiked(!isLiked);

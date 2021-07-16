@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './header';
 
 const NotFound = () => {
+  useEffect(() => {
+    document.title = 'Oops! - Denton Forums';
+  });
+
   return (
     <>
       <Header />

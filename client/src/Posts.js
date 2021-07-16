@@ -47,7 +47,7 @@ const Posts = ({ pageNum }) => {
 
   // load 15 most recent posts on start
   useEffect(() => {
-    fetch(`http://localhost:3001/be/getPosts/${pageNum}`)
+    fetch(`/be/getPosts/${pageNum}`)
       .then((response) => response.json())
       .then((posts) => {
         if (!posts.err) {
@@ -106,6 +106,7 @@ const Page = () => {
   };
 
   useEffect(() => {
+    document.title = 'Home - Denton Forums';
     window.addEventListener('scroll', handleScroll);
 
     return () => {

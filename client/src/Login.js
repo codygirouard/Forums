@@ -32,6 +32,7 @@ export const SignIn = () => {
   const [passError, setPassError] = useState(null);
 
   useEffect(() => {
+    document.title = 'Login - Denton Forums';
     if (localStorage.getItem('name')) {
       navigate('/');
     }
@@ -50,8 +51,8 @@ export const SignIn = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginInfo),
     };
-    const res = await fetch('http://localhost:3001/be/userLogin', options).then(
-      (response) => response.json()
+    const res = await fetch('/be/userLogin', options).then((response) =>
+      response.json()
     );
 
     if (res.succ) {
@@ -199,6 +200,7 @@ export const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'Register - Denton Forums';
     if (localStorage.getItem('name')) {
       navigate('/');
     }
@@ -220,10 +222,9 @@ export const SignUp = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginInfo),
     };
-    const res = await fetch(
-      'http://localhost:3001/be/createAccount',
-      options
-    ).then((response) => response.json());
+    const res = await fetch('/be/createAccount', options).then((response) =>
+      response.json()
+    );
 
     if (res.succ) {
       localStorage.setItem('name', res.succ);

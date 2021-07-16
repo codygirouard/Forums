@@ -2,18 +2,25 @@ import express from 'express';
 import routes from './routes/routes';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 //mongoose connection to mongodb
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/forumsDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+mongoose
+  .connect(
+    'mongodb+srv://forums:cQxJICyIPTJ398LB@forums.2w49u.mongodb.net/forumsDB?retryWrites=true&w=majority',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
+  )
+  .then(() => console.log('Connected to Database Successfully'))
+  .catch((err) => console.log(err));
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +33,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 routes(app);
 
