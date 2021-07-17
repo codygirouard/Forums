@@ -9,20 +9,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 5000;
+const uri = process.env.MONGODB_URI;
 
 const app = express();
 
 //mongoose connection to mongodb
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(
-    'mongodb+srv://forums:cQxJICyIPTJ398LB@forums.2w49u.mongodb.net/forumsDB?retryWrites=true&w=majority',
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    }
-  )
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then(() => console.log('Connected to Database Successfully'))
   .catch((err) => console.log(err));
 
