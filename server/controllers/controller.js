@@ -19,7 +19,7 @@ export const addNewUser = async (req, res) => {
   const saltRounds = 10;
 
   const existingUser = await User.findOne({
-    $or: [{ name: name }, { email: email }],
+    $or: [{ username: name.toLowerCase() }, { email: email }],
   });
 
   // error user already exists
@@ -41,6 +41,7 @@ export const addNewUser = async (req, res) => {
 
     const info = {
       name,
+      username: name.toLowerCase(),
       email,
       pass_hash,
     };
@@ -67,7 +68,7 @@ export const userLogin = (req, res) => {
   }
 
   User.findOne(
-    { $or: [{ name: username }, { email: username }] },
+    { $or: [{ username: username }, { email: username }] },
     function (err, user) {
       // wrong user
       if (err) {

@@ -42,7 +42,7 @@ export const SignIn = () => {
     setUserError(null);
     setPassError(null);
     const loginInfo = {
-      username: data.username,
+      username: data.username.toLowerCase(),
       pwd: data.password,
     };
 
@@ -213,7 +213,7 @@ export const SignUp = () => {
 
     const loginInfo = {
       name: data.username,
-      email: data.email,
+      email: data.email.toLowerCase(),
       pwd: data.password,
     };
 
