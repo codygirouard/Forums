@@ -8,7 +8,7 @@ import {
   getPost,
   likePost,
   unlikePost,
-} from '../controllers/controller';
+} from '../controllers/controller.js';
 
 const routes = (app) => {
   app.route('/be/getPosts/:page?').get(getPosts);

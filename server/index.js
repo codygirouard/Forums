@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './routes/routes';
+import routes from './routes/routes.js';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
@@ -33,9 +33,13 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use('/', express.static(path.join(__dirname, '../client/build')));
 
 routes(app);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

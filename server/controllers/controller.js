@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserSchema, PostSchema } from '../models/model';
+import { UserSchema, PostSchema } from '../models/model.js';
 
 const User = mongoose.model('User', UserSchema);
 const Post = mongoose.model('Post', PostSchema);
