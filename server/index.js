@@ -37,14 +37,6 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 
 routes(app);
 
-app.get('/', (req, res) => {
-  res.send(`Node and express server running on port ${PORT}`);
-});
-
-app.get('/api', (req, res) => {
-  res.json({ message: 'Hello from server!' });
-});
-
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
