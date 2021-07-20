@@ -7,7 +7,7 @@ export const NewPost = () => {
   const titleErrors = {
     required: 'A title is required to make a post',
     minLength: 'Title must be at least 5 characters long',
-    maxLength: 'Title must be 40 characters long maximum',
+    maxLength: 'Title must be 80 characters long maximum',
     err: 'Error trying to post, please try again later',
   };
   const bodyErrors = {
@@ -89,7 +89,7 @@ export const NewPost = () => {
               {...register('title', {
                 required: true,
                 minLength: 5,
-                maxLength: 40,
+                maxLength: 80,
               })}
             />
             <label className="formLabel" htmlFor="title">

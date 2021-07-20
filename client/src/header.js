@@ -43,7 +43,9 @@ const Header = ({ scroll, login }) => {
             </Link>
           </li>
           <li className="dropdown">
-            <button className="dropdownBtn">Account</button>
+            <button className="dropdownBtn">
+              {(loggedIn && localStorage.getItem('name')) || 'Account'}
+            </button>
             <div className="dropdownContent">
               {!loggedIn && (
                 <>
