@@ -56,7 +56,7 @@ export const NewPost = () => {
     );
 
     if (res.succ) {
-      navigate(`/posts/${res.succ._id}`);
+      navigate(`/post/${res.succ._id}`);
     } else {
       setTitleError('err');
       setBodyError('err');
