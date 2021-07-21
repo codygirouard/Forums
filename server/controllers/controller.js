@@ -112,11 +112,11 @@ export const makePost = (req, res) => {
   };
   const newPost = new Post(info);
 
-  newPost.save((err) => {
+  newPost.save((err, post) => {
     if (err) {
       return res.json({ err });
     }
-    res.json({ succ: 'Posted' });
+    res.json({ succ: post });
   });
 };
 
