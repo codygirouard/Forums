@@ -187,8 +187,8 @@ export const getPosts = (req, res) => {
     null,
     {
       sort: '-date',
-      limit: 15,
-      skip: numPage * 15,
+      limit: 10,
+      skip: numPage * 10,
       select: {
         _id: 1,
         author: 1,
